@@ -2,6 +2,7 @@
   "name": "ko-starter-kit-ts",
   "version": "0.0.0",
   "devDependencies": {
+    "browser-sync": "^1.5.1",
     "chalk": "^0.5.1",
     "deeply": "~0.1.0",
     "del": "^0.1.3",

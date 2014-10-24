@@ -59,14 +59,14 @@ $ 2.1.4
     C:\src\ko-starter-kit-ts> gulp
     ~~~
 
-  2. Start a local web server, and browser to your site
+  2. This will start browser-sync (a self-reloading server), and open a browser to your site.
 
-    ~~~
-    C:\src\ko-starter-kit-ts> http-server src/
-    ~~~
+  3. If you wish to work with the optimized files, you can change the `gulpfile.js` to run browser-sync from your `dist` folder instead:
 
-  3. For working with the optimized files, you can run from the output (dist) folder instead
-
-    ~~~
-    C:\src\ko-starter-kit-ts> http-server dist/
+    ~~~ javascript
+    // Config
+var browserSyncConfig = {
+    server: {
+        baseDir: './dist'
+    },
     ~~~

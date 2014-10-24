@@ -6,7 +6,8 @@ var fs = require('fs'),
     es = require('event-stream'),
     mergeStream = require('merge-stream'),
     runSequence = require('run-sequence'),
-    del = require('del');
+    del = require('del'),
+    browserSync = require('browser-sync');
 
 // Gulp and plugins
 var gulp = require('gulp'),
@@ -14,6 +15,25 @@ var gulp = require('gulp'),
     plugins = gulpLoadPlugins();
 
 // Config
+var browserSyncConfig = {
+    server: {
+        baseDir: './src'
+    },
+    port: 8080,
+    open: true,
+    watchOptions: {
+        interval: 1500,
+        debounceDelay: 1000
+    },
+    ghostMode: {
+        clicks: false,
+        location: false,
+        forms: false,
+        scroll: false
+    },
+    host: 'localhost'
+};
+
 var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require.config.js') + '; require;');
     requireJsOptimizerConfig = merge(requireJsRuntimeConfig, {
         out: 'scripts.js',
@@ -87,7 +107,26 @@ gulp.task('clean', function(done) {
     del(['./dist/**', './tmp/**'], done);
 });
 
-gulp.task('default', ['html', 'js', 'css'], function(callback) {
+gulp.task('browser-sync', function() {
+    browserSync(browserSyncConfig);
+});
+
+gulp.task('watch', ['browser-sync'], function() {
+    gulp.watch(['./src/**/*.ts'], ['ts'])
+        .on ('change', function(file) {
+            browserSync.reload(file.path);
+        })
+        .on('error', function(e){
+            chalk.red('[ERROR]' + e.toString());
+        });
+
+    gulp.watch(['./src/css/*.css'], ['css'])
+        .on('change', function(file){
+            browserSync.reload(file.path, { stream: true });
+        });
+});
+
+gulp.task('default', ['html', 'js', 'css', 'watch'], function(callback) {
     callback();
     console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
 });
