@@ -89,3 +89,13 @@ interface Signal {
 
     removeAll();
 }
+
+interface SignalStatic {
+    new(): Signal;
+}
+
+declare var signal: SignalStatic;
+
+declare module "signals" {
+    export = signal;
+}
